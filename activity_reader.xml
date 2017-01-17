@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_reader"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="org.strykeforce.qrscannergenerator.ReaderActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QRCode Scanner"
+        android:textSize = "25dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView3" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "SCAN"
+        android:id="@+id/scan_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="99dp" />
+
+    <!-- RED 1 CHECK OFF
+    //RED 1 CHECK ON-->
+
+    <!-- RED 2 CHECK OFF
+    //RED 2 CHECK ON-->
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:drawable/checkbox_on_background"
+        android:layout_below="@+id/red2view"
+        android:layout_toRightOf="@+id/red2Off"
+        android:layout_toEndOf="@+id/red2Off"
+        android:id="@+id/red2On" />
+
+    <TextView
+        android:text="Red 2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/red2view"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/red2Off"
+        android:layout_alignStart="@+id/red2Off" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:drawable/checkbox_off_background"
+        android:layout_below="@+id/red3view"
+        android:layout_alignLeft="@+id/red3view"
+        android:layout_alignStart="@+id/red3view"
+        android:id="@+id/red3Off" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:drawable/checkbox_on_background"
+        android:id="@+id/red3On"
+        android:layout_below="@+id/red3view"
+        android:layout_toRightOf="@+id/red3Off"
+        android:layout_toEndOf="@+id/red3Off" />
+
+    <TextView
+        android:text="Red 3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/red3view"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_above="@+id/red1On"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="17dp"
+        android:layout_marginEnd="17dp" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:drawable/checkbox_off_background"
+        android:id="@+id/red2Off"
+        android:layout_below="@+id/red2view"
+        android:layout_alignLeft="@+id/scan_btn"
+        android:layout_alignStart="@+id/scan_btn" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:drawable/checkbox_off_background"
+        android:id="@+id/red1Off"
+        android:layout_below="@+id/red1view"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp" />
+
+    <TextView
+        android:text="Red 1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/red1view"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_alignBaseline="@+id/red2view"
+        android:layout_alignBottom="@+id/red2view"
+        android:layout_alignLeft="@+id/red1Off"
+        android:layout_alignStart="@+id/red1Off" />
+
+    <LinearLayout
+            android:id="@+id/footer"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/red1On"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_toRightOf="@+id/red1On">
+
+        <ImageButton
+                android:id="@+id/sendButton"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/ic_menu_send"/>
+    </LinearLayout>
+
+    <TextView
+        android:text="SEND/ STORE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize = "19dp"
+        android:id="@+id/sendStoreLabel"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/footer"
+        android:layout_toLeftOf="@+id/footer" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:drawable/checkbox_on_background"
+        android:id="@+id/red1On"
+        android:layout_below="@+id/red1view"
+        android:layout_toRightOf="@+id/red1Off"
+        android:layout_toEndOf="@+id/red1Off" />
+
+    <CheckBox
+        android:text="Check"
+        android:layout_height="100dp"
+        android:id="@+id/checkBox"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/red1view"
+        android:layout_alignStart="@+id/red1view"
+        android:layout_alignRight="@+id/red1On"
+        android:layout_alignEnd="@+id/red1On"
+        android:layout_width="100dp"
+        style="@android:style/Widget.CompoundButton.CheckBox"
+        android:checked="false"
+        android:width="100dp"
+        android:height="100dp" />
+
+
+</RelativeLayout>
