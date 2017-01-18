@@ -1,15 +1,16 @@
 package org.strykeforce.qrscannergenerator;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
-
 import com.firebase.client.Firebase;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -20,10 +21,10 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Scanner;
 
+import static org.strykeforce.qrscannergenerator.R.id.view;
+
 public class ReaderActivity extends AppCompatActivity {
     private Button scan_btn;
-    private Button reset_btn;
-    private Button nextMatch_btn;
     private CheckBox[] checkboxes = new CheckBox[6]; //refers to off/on checkboxes images
     private String scanResult;
     private static final String FIREBASE_URL = "https://testproj1-dc6de.firebaseio.com/"; //set to URL of firebase to send to
@@ -64,12 +65,31 @@ public class ReaderActivity extends AppCompatActivity {
             }
         });
 
+
+
         //clears current stored data and resets checkboxes when reset button clicked
         //NEED TO CREATE DIALOG BOX ARE YOU SURE ALSO SAME WITH NEXT MATCH BUTTON
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("RESET MATCH?");
+        builder.setMessage("Are you sure you want to clear the data and restart this match?");
         findViewById(R.id.resetButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetMatch();
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        resetMatch();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
             }
         });
 
@@ -151,7 +171,6 @@ public class ReaderActivity extends AppCompatActivity {
         {
             checkboxes[j].setChecked(false);
         }
-        Toast.makeText(this, "MATCH RESET", Toast.LENGTH_LONG).show();
     }
 
     /**
