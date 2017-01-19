@@ -51,7 +51,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="14dp"
         android:clickable="false"
-        app:buttonTint="@color/colorAccent"
+        android:buttonTint="@color/colorAccent"
         android:checked="false" />
 
     <TextView
@@ -250,6 +250,17 @@
         android:layout_below="@+id/sendStoreLabel"
         android:layout_toLeftOf="@+id/checkRed3"
         android:layout_toStartOf="@+id/checkRed3" />
+
+    <TextView
+        android:text=" Match: 1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:layout_alignTop="@+id/sendButton"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/matchNumView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/common_google_signin_btn_text_light_pressed" />
 
 
 </RelativeLayout>

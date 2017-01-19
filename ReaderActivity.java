@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.google.android.gms.appindexing.Action;
@@ -21,6 +23,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Scanner;
 
+import static android.R.attr.button;
 import static org.strykeforce.qrscannergenerator.R.id.view;
 
 public class ReaderActivity extends AppCompatActivity {
@@ -32,6 +35,7 @@ public class ReaderActivity extends AppCompatActivity {
     private static final int NUM_ELEMENTS_SENDING = 3; //adjust to how much data will be sent in QR code
     private ChatMessage[] scoutingData = new ChatMessage[6];
     private int curScoutID;
+    private int matchNumber=1;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -42,6 +46,14 @@ public class ReaderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) { //method that creates everything when app is opened
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reader); //sets to layout of app
+
+        //need to count scored balls, not shot balls
+        //number gears  climbing yes/no fast/slow auto place gear? score balls - count. shooting location in key or out key or both
+        //low goal number of dumps
+        //floor pickup / hopper outside field pickup check box
+        //defender on them yes/no
+        //playing defense yes/no
+        //qualitative - broken down / auto movement / notes / defense
 
         //initializes firebase to be able to send data to that URL
         Firebase.setAndroidContext(this);
@@ -68,6 +80,15 @@ public class ReaderActivity extends AppCompatActivity {
             }
         });*/
 
+        final TextView matchDisplay = (TextView)findViewById(R.id.matchNumView);
+        findViewById(R.id.nextMatchButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextMatch();
+                matchDisplay.setText("Match: " + Integer.toString(matchNumber));
+            }
+        });
+
 
         //sends message when send button clicked
         final AlertDialog.Builder builderSend = new AlertDialog.Builder(this);
@@ -90,6 +111,8 @@ public class ReaderActivity extends AppCompatActivity {
                 });
                 AlertDialog alert = builderSend.create();
                 alert.show();
+                TextView msgTxt = (TextView) alert.findViewById(android.R.id.message);
+                msgTxt.setTextSize((float)35.0);
             }
         });
 
@@ -108,14 +131,19 @@ public class ReaderActivity extends AppCompatActivity {
                         dialog.dismiss(); //closes dialog box
                     }
                 });
+
+
                 builderReset.setNegativeButton("NO", new DialogInterface.OnClickListener() { //sets what the no option will do
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss(); //closes dialog box
                     }
                 });
-                AlertDialog alert = builderReset.create();
+                final AlertDialog alert = builderReset.create();
+                System.out.println(DialogInterface.BUTTON_NEGATIVE);
                 alert.show();
+                TextView msgTxt = (TextView) alert.findViewById(android.R.id.message);
+                msgTxt.setTextSize((float)35.0);
 
             }
         });
@@ -168,6 +196,10 @@ public class ReaderActivity extends AppCompatActivity {
             scoutingData[curScoutID-1] = sendingObj;
             scanResult = "";
         }
+    }
+
+    public void nextMatch(){
+        matchNumber++;
 
     }
 
