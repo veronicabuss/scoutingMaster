@@ -30,6 +30,8 @@ public class ReaderActivity extends AppCompatActivity {
     private static final String FIREBASE_URL = "https://testproj1-dc6de.firebaseio.com/"; //set to URL of firebase to send to
     private Firebase firebaseRef;
     private static final int NUM_ELEMENTS_SENDING = 3; //adjust to how much data will be sent in QR code
+    private ChatMessage[] scoutingData = new ChatMessage[6];
+    private int curScoutID;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -57,37 +59,62 @@ public class ReaderActivity extends AppCompatActivity {
             checkboxes[j].setChecked(false);
         }
 
+        /*
+        STORE BUTTON WILL STORE LOCALLY
+        findViewById(R.id.storeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                storeData();
+            }
+        });*/
+
+
         //sends message when send button clicked
+        final AlertDialog.Builder builderSend = new AlertDialog.Builder(this);
+        builderSend.setTitle("STORE AND SEND MATCH?");
+        builderSend.setMessage("Are you sure you want to send the data? Do you have ALL the scouting data?");
         findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                builderSend.setPositiveButton("YES", new DialogInterface.OnClickListener() { //sets what the yes option will do
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendMessage(); //calls method to restart match
+                        dialog.dismiss(); //closes dialog box
+                    }
+                });
+                builderSend.setNegativeButton("NO", new DialogInterface.OnClickListener() { //sets what the no option will do
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss(); //closes dialog box
+                    }
+                });
+                AlertDialog alert = builderSend.create();
+                alert.show();
             }
         });
 
 
 
-        //clears current stored data and resets checkboxes when reset button clicked
-        //NEED TO CREATE DIALOG BOX ARE YOU SURE ALSO SAME WITH NEXT MATCH BUTTON
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("RESET MATCH?");
-        builder.setMessage("Are you sure you want to clear the data and restart this match?");
+        //first, opens a dialog box to check if they are sure with clearing the match, then clears current stored data and resets checkboxes
+        final AlertDialog.Builder builderReset = new AlertDialog.Builder(this);
+        builderReset.setTitle("RESET MATCH?");
+        builderReset.setMessage("Are you sure you want to clear the data and restart this match?");
         findViewById(R.id.resetButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                builderReset.setPositiveButton("YES", new DialogInterface.OnClickListener() { //sets what the yes option will do
                     public void onClick(DialogInterface dialog, int which) {
-                        resetMatch();
-                        dialog.dismiss();
+                        resetMatch(); //calls method to restart match
+                        dialog.dismiss(); //closes dialog box
                     }
                 });
-                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                builderReset.setNegativeButton("NO", new DialogInterface.OnClickListener() { //sets what the no option will do
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                        dialog.dismiss(); //closes dialog box
                     }
                 });
-                AlertDialog alert = builder.create();
+                AlertDialog alert = builderReset.create();
                 alert.show();
 
             }
@@ -123,22 +150,35 @@ public class ReaderActivity extends AppCompatActivity {
             } else {
                 scanResult = result.getContents(); //gets data from QR code and stores in private string
                 Toast.makeText(this, scanResult, Toast.LENGTH_LONG).show(); //displays data from QR code on screen
+                storeData();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    //sends data as a single object to firebase
-    public void sendMessage() {
+    //change reset button, check for all 6 scouts before sending message
+    public void storeData(){
         //gets QR results from private string
         String message = scanResult;
 
-        //makes new object and calls findElements method as to push a single chatElement object to firebase
-        if (!message.equals("")) { //sends only if message isn't empty
+        if(!message.equals(""))
+        {
             ChatMessage sendingObj = findElements(message);
-            firebaseRef.push().setValue(sendingObj);
+            scoutingData[curScoutID-1] = sendingObj;
             scanResult = "";
+        }
+
+    }
+
+    //sends data as a single object to firebase
+    public void sendMessage() {
+        //makes new object and calls findElements method as to push a single chatElement object to firebase
+        firebaseRef.push().setValue(scoutingData);
+        scoutingData = new ChatMessage[6];
+        for(int j=0; j<checkboxes.length; j++)
+        {
+            checkboxes[j].setChecked(false);
         }
     }
 
@@ -157,6 +197,7 @@ public class ReaderActivity extends AppCompatActivity {
 
             if (j == 0) //sets check button on/off of which scouter it received from
             {
+                curScoutID = elements[0];
                 checkboxes[elements[0] - 1].setChecked(true);
             }
         }
@@ -167,6 +208,7 @@ public class ReaderActivity extends AppCompatActivity {
     //clears the current match stores and resets the checkboxes
     public void resetMatch()
     {
+        scoutingData = new ChatMessage[6];
         for(int j=0; j<checkboxes.length; j++)
         {
             checkboxes[j].setChecked(false);
