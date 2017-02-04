@@ -32,15 +32,34 @@ public class ReaderActivity extends AppCompatActivity {
     private String scanResult;
     private static final String FIREBASE_URL = "https://testproj1-dc6de.firebaseio.com/"; //set to URL of firebase to send to
     private Firebase firebaseRef;
-    private static final int NUM_ELEMENTS_SENDING = 3; //adjust to how much data will be sent in QR code
+    private static final int NUM_ELEMENTS_SENDING = 17; //first two numeric, last 7 true false
     private ChatMessage[] scoutingData = new ChatMessage[6];
     private int curScoutID;
     private int matchNumber=1;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private GoogleApiClient client;
+
+ /*
+    SCOUT ID
+    TEAM NUM
+    MATCH NUM
+
+    Auto High
+    Auto Low
+    Auto Gears
+
+    Tele High
+    Tele Low
+    Tele Gears
+
+    Crosses base line
+    Picks gear off ground
+    On defence
+    Defended shooting high
+    Touchpad
+    Climb Rope Time
+    Scout Name
+    Notes
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //method that creates everything when app is opened
@@ -131,8 +150,6 @@ public class ReaderActivity extends AppCompatActivity {
                         dialog.dismiss(); //closes dialog box
                     }
                 });
-
-
                 builderReset.setNegativeButton("NO", new DialogInterface.OnClickListener() { //sets what the no option will do
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -177,7 +194,7 @@ public class ReaderActivity extends AppCompatActivity {
                 Toast.makeText(this, "You cancelled the scanning", Toast.LENGTH_LONG).show();
             } else {
                 scanResult = result.getContents(); //gets data from QR code and stores in private string
-                Toast.makeText(this, scanResult, Toast.LENGTH_LONG).show(); //displays data from QR code on screen
+                //Toast.makeText(this, scanResult, Toast.LENGTH_LONG).show(); //displays data from QR code on screen
                 storeData();
             }
         } else {
@@ -200,7 +217,6 @@ public class ReaderActivity extends AppCompatActivity {
 
     public void nextMatch(){
         matchNumber++;
-
     }
 
     //sends data as a single object to firebase
@@ -217,21 +233,21 @@ public class ReaderActivity extends AppCompatActivity {
     //extracts data from QR string and returns it in a single element
     public ChatMessage findElements(String tempScanResult) {
         Scanner scan = new Scanner(tempScanResult); //makes scanner out of string for ease of extraction
-        String tempLine;
+        String tempLine, tempString;
         int indexEl;
-        int elements[] = new int[NUM_ELEMENTS_SENDING];
+        String elements[] = new String[NUM_ELEMENTS_SENDING];
 
         //for each element, stores in object
         for (int j = 0; j < NUM_ELEMENTS_SENDING; j++) {
             tempLine = scan.nextLine(); //gets line with element
             indexEl = tempLine.indexOf(':'); //extracts number after colon and stores in array
-            elements[j] = Integer.parseInt(tempLine.substring(indexEl + 2));
-
-            if (j == 0) //sets check button on/off of which scouter it received from
+            elements[j] = tempLine.substring(indexEl + 2);
+            if (j==0) //sets check button on/off of which scouter it received from
             {
-                curScoutID = elements[0];
-                checkboxes[elements[0] - 1].setChecked(true);
+                curScoutID = Integer.parseInt(elements[0]);
+                checkboxes[curScoutID - 1].setChecked(true);
             }
+
         }
         ChatMessage sendingChat = new ChatMessage(elements);
         return sendingChat;
@@ -247,10 +263,15 @@ public class ReaderActivity extends AppCompatActivity {
         }
     }
 
+    private static int countLines(String str){
+        String[] lines = str.split("\r\n|\r|\n");
+        return  lines.length;
+    }
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+     * See https://g.co/AppIndexing/AndroidStudio for more information.*/
+
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
                 .setName("Reader Page") // TODO: Define a title for the content shown.

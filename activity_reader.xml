@@ -19,13 +19,6 @@
         android:id="@+id/textView3"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-    <!-- RED 1 CHECK OFF
-    //RED 1 CHECK ON-->
-
-    <!-- RED 2 CHECK OFF
-    //RED 2 CHECK ON-->
-
-
     <TextView
         android:text="Red 3"
         android:layout_width="wrap_content"
@@ -88,7 +81,7 @@
         android:layout_alignBottom="@+id/checkRed1"
         android:layout_centerHorizontal="true"
         android:clickable="false"
-        app:buttonTint="@color/colorAccent" />
+        android:buttonTint="@color/colorAccent" />
 
     <TextView
         android:text="Blue 1"
@@ -124,7 +117,7 @@
         android:layout_marginTop="14dp"
         android:clickable="false"
         android:checked="false"
-        app:buttonTint="@color/colorPrimary" />
+        android:buttonTint="@color/colorPrimary" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -138,7 +131,7 @@
         android:layout_alignBottom="@+id/checkBlue1"
         android:layout_alignLeft="@+id/checkRed2"
         android:layout_alignStart="@+id/checkRed2"
-        app:buttonTint="@color/colorPrimary" />
+        android:buttonTint="@color/colorPrimary" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -204,19 +197,6 @@
         android:layout_alignTop="@+id/nextMatchButton"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "SCAN"
-        android:id="@+id/scan_btn"
-        android:scaleX="2.00"
-        android:scaleY="1.75"
-        android:layout_marginTop="77dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/red2view"
-        android:layout_alignStart="@+id/red2view" />
-
     <TextView
         android:text="   STORE                                      SEND"
         android:layout_height="wrap_content"
@@ -261,6 +241,19 @@
         android:id="@+id/matchNumView"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/common_google_signin_btn_text_light_pressed" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "SCAN"
+        android:id="@+id/scan_btn"
+        android:scaleX="2.00"
+        android:scaleY="1.75"
+        android:layout_marginTop="60dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/red2view"
+        android:layout_alignStart="@+id/red2view" />
 
 
 </RelativeLayout>
