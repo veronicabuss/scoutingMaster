@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,16 +22,13 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Scanner;
 
-import static android.R.attr.button;
-import static org.strykeforce.qrscannergenerator.R.id.view;
-
 public class ReaderActivity extends AppCompatActivity {
     private Button scan_btn;
     private CheckBox[] checkboxes = new CheckBox[6]; //refers to off/on checkboxes images
     private String scanResult;
     private static final String FIREBASE_URL = "https://testproj1-dc6de.firebaseio.com/"; //set to URL of firebase to send to
     private Firebase firebaseRef;
-    private static final int NUM_ELEMENTS_SENDING = 17; //first two numeric, last 7 true false
+    private static final int NUM_ELEMENTS_SENDING = 17;
     private ChatMessage[] scoutingData = new ChatMessage[6];
     private int curScoutID;
     private int matchNumber=1;
@@ -135,8 +131,7 @@ public class ReaderActivity extends AppCompatActivity {
             }
         });
 
-
-
+        
         //first, opens a dialog box to check if they are sure with clearing the match, then clears current stored data and resets checkboxes
         final AlertDialog.Builder builderReset = new AlertDialog.Builder(this);
         builderReset.setTitle("RESET MATCH?");
@@ -247,7 +242,6 @@ public class ReaderActivity extends AppCompatActivity {
                 curScoutID = Integer.parseInt(elements[0]);
                 checkboxes[curScoutID - 1].setChecked(true);
             }
-
         }
         ChatMessage sendingChat = new ChatMessage(elements);
         return sendingChat;
