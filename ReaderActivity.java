@@ -28,33 +28,33 @@ public class ReaderActivity extends AppCompatActivity {
     private String scanResult;
     private static final String FIREBASE_URL = "https://testproj1-dc6de.firebaseio.com/"; //set to URL of firebase to send to
     private Firebase firebaseRef;
-    private static final int NUM_ELEMENTS_SENDING = 17;
+    private static final int NUM_ELEMENTS_SENDING = 17, NUM_INT=15, NUM_STG=2;
     private ChatMessage[] scoutingData = new ChatMessage[6];
     private int curScoutID;
     private int matchNumber=1;
     private GoogleApiClient client;
 
- /*
-    SCOUT ID
-    TEAM NUM
-    MATCH NUM
+    /*
+    SCOUT ID int
+    TEAM NUM int
+    MATCH NUM int
 
-    Auto High
-    Auto Low
-    Auto Gears
+    Auto High int
 
-    Tele High
-    Tele Low
-    Tele Gears
+    Tele High int
+    Tele Low int
+    Tele Gears int
+    Climb Rope Time int
 
-    Crosses base line
-    Picks gear off ground
-    On defence
-    Defended shooting high
-    Touchpad
-    Climb Rope Time
-    Scout Name
-    Notes
+    Auto Low BOOL
+    Auto Gears BOOL
+    Crosses base line BOOL
+    Picks gear off ground BOOL
+    On defence BOOL
+    Defended shooting high  BOOL
+    Touchpad BOOL
+    Scout Name StrING
+    Notes STRING
      */
 
     @Override
@@ -131,7 +131,7 @@ public class ReaderActivity extends AppCompatActivity {
             }
         });
 
-        
+
         //first, opens a dialog box to check if they are sure with clearing the match, then clears current stored data and resets checkboxes
         final AlertDialog.Builder builderReset = new AlertDialog.Builder(this);
         builderReset.setTitle("RESET MATCH?");
@@ -206,6 +206,12 @@ public class ReaderActivity extends AppCompatActivity {
         {
             ChatMessage sendingObj = findElements(message);
             scoutingData[curScoutID-1] = sendingObj;
+            if(curScoutID==1)
+            {
+                matchNumber = sendingObj.getMatchNumberInt();
+                final TextView matchDisplay = (TextView)findViewById(R.id.matchNumView);
+                matchDisplay.setText("Match: " + matchNumber);
+            }
             scanResult = "";
         }
     }
@@ -230,6 +236,8 @@ public class ReaderActivity extends AppCompatActivity {
         Scanner scan = new Scanner(tempScanResult); //makes scanner out of string for ease of extraction
         String tempLine, tempString;
         int indexEl;
+        int[] nums = new int[NUM_INT];
+        String[] name = new String[NUM_STG];
         String elements[] = new String[NUM_ELEMENTS_SENDING];
 
         //for each element, stores in object
@@ -237,6 +245,25 @@ public class ReaderActivity extends AppCompatActivity {
             tempLine = scan.nextLine(); //gets line with element
             indexEl = tempLine.indexOf(':'); //extracts number after colon and stores in array
             elements[j] = tempLine.substring(indexEl + 2);
+            if(j<NUM_INT)
+            {
+                if(j>=8 && j<=14)
+                {
+                    if(elements[j].equals("false"))
+                    {
+                        nums[j] = 0;
+                    }
+                    else
+                        nums[j] = 1;
+                }
+                else{
+                    nums[j] = Integer.parseInt(elements[j]);
+                }
+
+            }
+            else{
+                name[j-NUM_INT] = elements[j];
+            }
             if (j==0) //sets check button on/off of which scouter it received from
             {
                 curScoutID = Integer.parseInt(elements[0]);
@@ -244,7 +271,8 @@ public class ReaderActivity extends AppCompatActivity {
             }
         }
         ChatMessage sendingChat = new ChatMessage(elements);
-        return sendingChat;
+        ChatMessage otherChat = new ChatMessage(nums, name);
+        return otherChat;
     }
 
     //clears the current match stores and resets the checkboxes
