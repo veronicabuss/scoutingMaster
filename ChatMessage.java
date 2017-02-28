@@ -3,32 +3,32 @@ package org.strykeforce.qrscannergenerator;
 public class ChatMessage {
     private String scoutID,teamNumber,matchNumber,autoHigh,autoLow,autoGear,teleHigh,teleLow,teleGear;
     private String baseLineCross,canPickGearOffGround,playsDefense,highShotDefended,touchPad,climbRopeTime,scoutName,notes;
-
+    private int scoutIDint,teamNumberint,matchNumberint,autoHighint,autoLowint,autoGearint,teleHighint,teleLowint,teleGearint;
+    private int baseLineCrossint,canPickGearOffGroundint,playsDefenseint,highShotDefendedint,touchPadint,climbRopeTimeint,scoutNameint,notesint;
+    //int numInt = 15, numStg = 2;
     public ChatMessage() {
-
     }
-
     /*
-    SCOUT ID
-    TEAM NUM
-    MATCH NUM
+    SCOUT ID int
+    TEAM NUM int
+    MATCH NUM int
 
-    Auto High
-    Auto Low
-    Auto Gears
+    Auto High int
+    Auto Low int
+    Auto Gears int
 
-    Tele High
-    Tele Low
-    Tele Gears
+    Tele High int
+    Tele Low int
+    Tele Gears int
+    Climb Rope Time int
 
-    Crosses base line
-    Picks gear off ground
-    On defence
-    Defended shooting high
-    Touchpad
-    Climb Rope Time
-    Scout Name
-    Notes
+    Crosses base line BOOL
+    Picks gear off ground BOOL
+    On defence BOOL
+    Defended shooting high  BOOL
+    Touchpad BOOL
+    Scout Name StrING
+    Notes STRING
      */
 
     public ChatMessage(String[] data) {
@@ -55,52 +55,101 @@ public class ChatMessage {
         this.notes = data[16];
     }
 
+    public ChatMessage(int[] data, String[] names)
+    {
+        this.scoutIDint = data[0];
+        this.teamNumberint = data[1];
+        this.matchNumberint = data[2];
+        this.autoHighint = data[3];
+        this.autoLowint = data[4];
+        this.autoGearint = data[5];
 
-    public String getTeamNumber() {
-        return teamNumber;
+        this.teleHighint = data[6];
+        this.teleLowint = data[7];
+        this.teleGearint = data[8];
+
+        this.baseLineCrossint = data[9];
+        this.canPickGearOffGroundint = data[10];
+        this.playsDefenseint = data[11];
+        this.highShotDefendedint = data[12];
+        this.touchPadint = data[13];
+        this.climbRopeTimeint = data[14];
+
+        this.scoutName = names[0];
+        this.notes = names[1];
+    }
+        /*
+    SCOUT ID int
+    TEAM NUM int
+    MATCH NUM int
+    Auto High int
+    Auto Low int
+    Auto Gears int
+    Tele High int
+    Tele Low int
+    Tele Gears int
+    Climb Rope Time int
+    Crosses base line BOOL
+    Picks gear off ground BOOL
+    On defence BOOL
+    Defended shooting high  BOOL
+    Touchpad BOOL
+    Scout Name StrING
+    Notes STRING
+    {"phonetype":"N95","cat":"WP"}
+     */
+    public String jsonString()
+    {
+        String stg = "{\"Scout ID\":" + this.scoutIDint + ",\"Team Num\":" + this.teamNumberint + ",\"Match Num\":" + this.matchNumberint+"}";
+        System.out.println(stg);
+        return stg;
     }
 
-    public String getScoutID() {
-        return scoutID;
+    public int getTeamNumberInt() {
+        return teamNumberint;
     }
 
-    public String getBaseLineCross() {
-        return baseLineCross;
+    public int getScoutID() {
+        return scoutIDint;
     }
 
-    public String getAutoGear() {
-        return autoGear;
+    public int getBaseLineCross() {
+        return baseLineCrossint;
     }
 
-    public String getPlaysDefense() {
-        return playsDefense;
+    public int getAutoGear() {
+        return autoGearint;
     }
 
-    public String getCanPickGearOffGround() {
-        return canPickGearOffGround;
+    public int getPlaysDefense() {
+        return playsDefenseint;
     }
 
-    public String getHighShotDefended() {
-        return highShotDefended;
+    public int getCanPickGearOffGround() {
+        return canPickGearOffGroundint;
     }
 
-    public String getTouchPad() {
-        return touchPad;
+    public int getHighShotDefended() {
+        return highShotDefendedint;
     }
 
-    public String getMatchNumber() {return matchNumber;}
+    public int getTouchPad() {
+        return touchPadint;
+    }
 
-    public String getAutoHigh() {return autoHigh;}
+    public int getMatchNumberInt() {return matchNumberint;}
 
-    public String getAutoLow() {return autoLow;}
+    public int getAutoHigh() {return autoHighint;}
 
-    public String getTeleHigh() {return teleHigh;}
+    public int getAutoLow() {return autoLowint;}
 
-    public String getTeleLow() {return teleLow;}
+    public int getTeleHigh() {return teleHighint;}
 
-    public String getTeleGear() {return teleGear;}
+    public int getTeleLow() {return teleLowint;}
 
-    public String getClimbRopeTime() {return climbRopeTime;}
+    public int getTeleGear() {return teleGearint;}
+
+    public int getClimbRopeTime() {return climbRopeTimeint;}
 
     public String getScoutName() {return scoutName;}
 
