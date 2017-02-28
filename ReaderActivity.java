@@ -1,10 +1,12 @@
 package org.strykeforce.qrscannergenerator;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.firebase.client.Firebase;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -20,6 +23,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class ReaderActivity extends AppCompatActivity {
@@ -33,6 +40,9 @@ public class ReaderActivity extends AppCompatActivity {
     private int curScoutID;
     private int matchNumber=1;
     private GoogleApiClient client;
+
+    //FILE IO VARIABLES
+
 
     /*
     SCOUT ID int
@@ -86,14 +96,19 @@ public class ReaderActivity extends AppCompatActivity {
             checkboxes[j].setChecked(false);
         }
 
-        /*
-        STORE BUTTON WILL STORE LOCALLY
+
+        //-------------------------------------------------------------------------------------------
+        //STORES DATA LOCALLY
         findViewById(R.id.storeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                storeData();
+                storeLocal();
             }
-        });*/
+        });
+        //I THINK WE SHOULD HAVE A OTHER BUTTON FOR SAVE TO USB
+        //-------------------------------------------------------------------------------------------
+
+
 
         final TextView matchDisplay = (TextView)findViewById(R.id.matchNumView);
         findViewById(R.id.nextMatchButton).setOnClickListener(new View.OnClickListener() {
@@ -190,15 +205,15 @@ public class ReaderActivity extends AppCompatActivity {
             } else {
                 scanResult = result.getContents(); //gets data from QR code and stores in private string
                 //Toast.makeText(this, scanResult, Toast.LENGTH_LONG).show(); //displays data from QR code on screen
-                storeData();
+                storeScout();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    //change reset button, check for all 6 scouts before sending message
-    public void storeData(){
+    //stores scout data from QR string to chatmessage array and sets match number to red 1's match num
+    public void storeScout(){
         //gets QR results from private string
         String message = scanResult;
 
@@ -214,6 +229,11 @@ public class ReaderActivity extends AppCompatActivity {
             }
             scanResult = "";
         }
+    }
+
+    public void storeLocal()
+    {
+        return;
     }
 
     public void nextMatch(){
@@ -239,38 +259,45 @@ public class ReaderActivity extends AppCompatActivity {
         int[] nums = new int[NUM_INT];
         String[] name = new String[NUM_STG];
         String elements[] = new String[NUM_ELEMENTS_SENDING];
+        int j=0; //COUNT OF NUM ELEMENTS
 
-        //for each element, stores in object
-        for (int j = 0; j < NUM_ELEMENTS_SENDING; j++) {
-            tempLine = scan.nextLine(); //gets line with element
-            indexEl = tempLine.indexOf(':'); //extracts number after colon and stores in array
-            elements[j] = tempLine.substring(indexEl + 2);
-            if(j<NUM_INT)
+        while (scan.hasNextLine())
+        {
+            String line = scan.nextLine();
+            Scanner lineReader = new Scanner(line);
+            lineReader.useDelimiter("\t");
+            while (lineReader.hasNext())
             {
-                if(j>=8 && j<=14)
+                tempLine = lineReader.next();
+                indexEl = tempLine.indexOf(':'); //extracts number after colon and stores in array
+                elements[j] = tempLine.substring(indexEl + 2);
+                if(j<NUM_INT)
                 {
-                    if(elements[j].equals("false"))
+                    if(j>=8 && j<=14)
                     {
-                        nums[j] = 0;
+                        if(elements[j].equals("false"))
+                        {
+                            nums[j] = 0;
+                        }
+                        else
+                            nums[j] = 1;
                     }
-                    else
-                        nums[j] = 1;
+                    else{
+                        nums[j] = Integer.parseInt(elements[j]);
+                    }
                 }
                 else{
-                    nums[j] = Integer.parseInt(elements[j]);
+                    name[j-NUM_INT] = elements[j];
                 }
-
-            }
-            else{
-                name[j-NUM_INT] = elements[j];
-            }
-            if (j==0) //sets check button on/off of which scouter it received from
-            {
-                curScoutID = Integer.parseInt(elements[0]);
-                checkboxes[curScoutID - 1].setChecked(true);
+                if (j==0) //sets check button on/off of which scouter it received from
+                {
+                    curScoutID = Integer.parseInt(elements[0]);
+                    checkboxes[curScoutID - 1].setChecked(true);
+                }
+                j++;
             }
         }
-        ChatMessage sendingChat = new ChatMessage(elements);
+        //ChatMessage sendingChat = new ChatMessage(elements);
         ChatMessage otherChat = new ChatMessage(nums, name);
         return otherChat;
     }
